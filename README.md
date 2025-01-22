@@ -9,4 +9,5 @@ Currently, two official plugins are available:
 
 # Getting Started
 
-Run `npm create vite@latest` to create a new project, and then run `npm run dev` to start the server.
+git tag -a v1.0.0 -m "Deploy to Vercel"
+git push origin v1.0.0
