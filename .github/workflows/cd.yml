@@ -1,0 +1,29 @@
+name: CD Pipeline
+on:
+  workflow_dispatch: # Manual trigger in GitHub UI
+  push:
+    tags:
+      - 'v*' # Deploy on version tags
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test] # Wait for CI to pass
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v30
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }} # Optional if in a team
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: YOUR_VERCEL_TEAM_NAME # Optional
+          production: true # Deploy to production
